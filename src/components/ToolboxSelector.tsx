@@ -198,9 +198,11 @@ const ToolboxSelector: React.FC<ToolboxSelectorProps> = ({
                 className="block sm:hidden fixed bottom-16 left-3 right-3 z-50"
               >
                 <div className="relative">
-                  <div className="relative bg-gradient-to-br from-white/10 via-electric-cyan/6 to-space-blue/14 dark:from-space-blue/40 dark:via-electric-cyan/12 dark:to-neon-purple/24 backdrop-blur-xl border border-white/20 dark:border-electric-cyan/30 rounded-xl overflow-hidden shadow-2xl shadow-electric-cyan/12 max-h-[65vh] overflow-y-auto">
-                    <div className="p-3">
-                      {/* Reuse same content: language + music sections */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-electric-cyan/30 via-neon-purple/30 to-electric-cyan/30 rounded-2xl blur opacity-40" />
+
+                  <div className="relative bg-gradient-to-br from-white/15 via-electric-cyan/10 to-space-blue/20 dark:from-space-blue/40 dark:via-electric-cyan/15 dark:to-neon-purple/25 backdrop-blur-xl border border-white/25 dark:border-electric-cyan/40 rounded-xl overflow-hidden shadow-2xl shadow-electric-cyan/10 max-h-[65vh] overflow-y-auto">
+                    <div className="relative p-3">
+                      {/* Language Section */}
                       <div className="mb-4">
                         <div className="flex items-center gap-2 mb-2 px-2">
                           <Globe className="w-4 h-4 text-electric-cyan" />
@@ -208,11 +210,26 @@ const ToolboxSelector: React.FC<ToolboxSelectorProps> = ({
                         </div>
 
                         <div className="space-y-1">
-                          {languages.map((language) => (
-                            <button key={language.code} onClick={() => handleLanguageChange(language)} className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-150 ${currentLanguage.code === language.code ? 'bg-gradient-to-r from-electric-cyan/20 to-neon-purple/15 text-electric-cyan border border-electric-cyan/40' : 'text-gray-300 hover:text-white hover:bg-white/6'}`}>
-                              <span className="text-base">{language.flag}</span>
-                              <span className="font-medium text-xs">{language.name}</span>
-                            </button>
+                          {languages.map((language, index) => (
+                            <motion.button
+                              key={language.code}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.05 }}
+                              onClick={() => handleLanguageChange(language)}
+                              className={`group w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all duration-300 hover:scale-[1.02] relative overflow-hidden ${
+                                currentLanguage.code === language.code
+                                  ? 'bg-gradient-to-r from-electric-cyan/20 to-neon-purple/15 text-electric-cyan border border-electric-cyan/40 shadow-lg shadow-electric-cyan/20'
+                                  : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/10 hover:to-electric-cyan/5 border border-transparent hover:border-white/20 dark:hover:border-electric-cyan/30'
+                              }`}
+                            >
+                              <div className="absolute inset-0 bg-gradient-to-r from-electric-cyan/10 via-neon-purple/10 to-electric-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                              <span className="relative z-10 text-base">{language.flag}</span>
+                              <span className="relative z-10 font-medium text-xs">{language.name}</span>
+                              {currentLanguage.code === language.code && (
+                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="relative z-10 ml-auto w-2 h-2 bg-electric-cyan rounded-full shadow-lg shadow-electric-cyan/50" />
+                              )}
+                            </motion.button>
                           ))}
                         </div>
                       </div>
@@ -225,16 +242,57 @@ const ToolboxSelector: React.FC<ToolboxSelectorProps> = ({
                           <span className="text-xs font-semibold text-white/80 dark:text-electric-cyan/80 uppercase tracking-wider">Musik</span>
                         </div>
 
-                        <button onClick={() => { onTogglePlay(); if (onToggle) onToggle(false); else setInternalIsOpen(false); }} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left bg-transparent text-gray-300 hover:text-white">
-                          {isPlaying ? <Pause className="w-4 h-4 text-electric-cyan" /> : <Play className="w-4 h-4" />}<span className="font-medium text-sm">{isPlaying ? 'Pause Music' : 'Play Music'}</span>
-                        </button>
-
-                        <div className="mt-3">
-                          <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/5">
-                            <button onClick={onToggleMute} className="flex items-center gap-2">{isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4" />}<span className="font-medium text-sm">{isMuted ? 'Unmute' : 'Volume'}</span></button>
-                            <div className="ml-auto text-xs font-medium">{Math.round(volume * 100)}%</div>
+                        <motion.button
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          onClick={() => {
+                            onTogglePlay();
+                            if (onToggle) {
+                              onToggle(false);
+                            } else {
+                              setInternalIsOpen(false);
+                            }
+                          }}
+                          className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-300 hover:scale-[1.02] relative overflow-hidden text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/10 hover:to-electric-cyan/5 border border-transparent hover:border-white/25 dark:hover:border-electric-cyan/40 mb-2"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-electric-cyan/10 via-neon-purple/10 to-electric-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="relative z-10">
+                            {isPlaying ? <Pause className="w-4 h-4 text-electric-cyan" /> : <Play className="w-4 h-4" />}
                           </div>
-                        </div>
+                          <span className="relative z-10 font-medium text-sm">{isPlaying ? 'Pause Music' : 'Play Music'}</span>
+                          {isPlaying && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="relative z-10 ml-auto w-2 h-2 bg-electric-cyan rounded-full shadow-lg shadow-electric-cyan/50 animate-pulse" />}
+                        </motion.button>
+
+                        <motion.div
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.05 }}
+                          className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 hover:scale-[1.02] relative overflow-hidden text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/10 hover:to-electric-cyan/5 border border-transparent hover:border-white/25 dark:hover:border-electric-cyan/40"
+                          onClick={() => setShowVolumeSlider(!showVolumeSlider)}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-electric-cyan/10 via-neon-purple/10 to-electric-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <button onClick={(e) => { e.stopPropagation(); onToggleMute(); }} className="relative z-10 flex items-center gap-2">
+                            {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4" />}
+                            <span className="font-medium text-sm">{isMuted ? 'Unmute' : 'Volume'}</span>
+                          </button>
+                          <span className="relative z-10 ml-auto text-xs font-medium text-white/70 dark:text-electric-cyan/70">{Math.round(volume * 100)}%</span>
+                        </motion.div>
+                        
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: showVolumeSlider ? 1 : 0, height: showVolumeSlider ? 'auto' : 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="mt-2 overflow-hidden"
+                        >
+                          <div className="flex items-center gap-2 p-3 rounded-xl bg-gradient-to-r from-white/15 via-electric-cyan/8 to-space-blue/15 dark:from-space-blue/25 dark:via-electric-cyan/15 dark:to-neon-purple/20 border border-white/25 dark:border-electric-cyan/40 hover:border-white/35 dark:hover:border-electric-cyan/60 backdrop-blur-lg shadow-xl shadow-electric-cyan/30 transition-all duration-300">
+                            <div className="relative flex-1 h-2">
+                              <input type="range" min="0" max="1" step="0.01" value={volume} onChange={(e) => onVolumeChange(parseFloat(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" aria-label="Volume control" />
+                              <div className="absolute inset-0 bg-white/25 dark:bg-space-blue/60 rounded-full border border-white/40 dark:border-electric-cyan/50" />
+                              <motion.div className="absolute left-0 top-0 h-full bg-gradient-to-r from-electric-cyan to-neon-purple rounded-full shadow-lg shadow-electric-cyan/30 transition-all duration-150" style={{ width: `${volume * 100}%` }} animate={{ scale: showVolumeSlider ? [1, 1.05, 1] : 1 }} transition={{ duration: 0.3 }} />
+                              <motion.div className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-gradient-to-br from-electric-cyan to-neon-purple rounded-full border-2 border-white/30 dark:border-electric-cyan/30 shadow-lg shadow-electric-cyan/50 transition-all duration-150 hover:scale-110 hover:border-white/50 dark:hover:border-electric-cyan/60" style={{ left: `calc(${volume * 100}% - 8px)` }} animate={{ scale: showVolumeSlider ? [1, 1.2, 1] : 1 }} transition={{ duration: 0.3, delay: 0.1 }} />
+                            </div>
+                          </div>
+                        </motion.div>
                       </div>
                     </div>
                   </div>
