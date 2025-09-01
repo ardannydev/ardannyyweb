@@ -21,6 +21,16 @@ public/audio/
 - Jika file tidak ditemukan, kontrol audio akan tersembunyi
 - Pastikan file audio memiliki lisensi yang sesuai untuk penggunaan web
 
+## Keamanan / Proteksi Download
+- Perlu dicatat: langkah di sisi klien hanya membuatnya lebih sulit untuk pengguna biasa atau downloader sederhana (IDM, ekstensi browser) — tetapi tidak 100% mencegah download.
+- Untuk proteksi lebih kuat, pertimbangkan solusi server-side seperti:
+	- Signed URLs (URL sementara yang kadaluarsa)
+	- Token-authenticated endpoints yang mengalirkan (stream) data setelah memeriksa session/user
+	- Mengaburkan respons dengan chunked streaming dan header CORS yang ketat
+	- Jika perlu kontrol hak cipta ketat, gunakan layanan DRM pihak ketiga atau platform hosting audio yang mendukung proteksi lisensi.
+
+Implementasi saat ini menggunakan fetch + Blob URL sehingga file asli tidak langsung terekspos di element HTML; itu membantu tetapi bukan solusi final untuk mencegah pengunduhan oleh pihak ketiga.
+
 ## Rekomendasi Musik
 - Musik instrumental atau ambient
 - Volume yang tidak terlalu keras

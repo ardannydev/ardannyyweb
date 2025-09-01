@@ -6,8 +6,15 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import React, { useEffect } from 'react';
 
 function App() {
+  useEffect(() => {
+    // cleanup any leftover initial loader
+    const el = document.getElementById('initial-loader');
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  }, []);
+
   return (
     <ThemeProvider>
       <LanguageProvider>

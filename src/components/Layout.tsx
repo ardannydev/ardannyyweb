@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useHeroAnimation } from '../contexts/HeroAnimationContext';
+import { useHeroAnimation } from '../contexts/useHeroAnimation';
 import ToolboxSelector from './ToolboxSelector';
 
 interface LayoutProps {

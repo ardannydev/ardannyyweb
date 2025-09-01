@@ -18,14 +18,102 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [audioSource, setAudioSource] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  // Note: IndexedDB helpers are created inside the effect below to avoid
+  // adding them as dependencies to the hook.
+
   // Load audio source
   useEffect(() => {
-    if (audioSrc) {
-      setAudioSource(audioSrc);
-    } else {
-      // Set default audio path directly without fetch check
-      setAudioSource('/audio/background-music.mp3');
-    }
+    // Try to load from IndexedDB cache first. Key is derived from pathname
+    // (so same-origin relative paths map to a simple key).
+    let cancelled = false;
+    let objectUrl: string | null = null;
+
+    const deriveKey = (src: string) => {
+      try {
+        // Use pathname as key for relative or absolute same-origin URLs
+        const url = new URL(src, window.location.href);
+        return url.pathname;
+      } catch {
+        return src;
+      }
+    };
+    const load = async () => {
+      const src = audioSrc || '/audio/background-music.mp3';
+      const key = deriveKey(src);
+
+      // IndexedDB helpers
+      const openDB = (): Promise<IDBDatabase> => {
+        return new Promise((resolve, reject) => {
+          const req = window.indexedDB.open('arda-audio-db', 1);
+          req.onupgradeneeded = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains('audio-files')) {
+              db.createObjectStore('audio-files');
+            }
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+      };
+
+      const getFromIDB = async (k: string): Promise<Blob | null> => {
+        try {
+          const db = await openDB();
+          return await new Promise((resolve, reject) => {
+            const tx = db.transaction('audio-files', 'readonly');
+            const store = tx.objectStore('audio-files');
+            const rq = store.get(k);
+            rq.onsuccess = () => resolve(rq.result || null);
+            rq.onerror = () => reject(rq.error);
+          });
+        } catch {
+          return null;
+        }
+      };
+
+      const putToIDB = async (k: string, blob: Blob) => {
+        try {
+          const db = await openDB();
+          await new Promise<void>((resolve, reject) => {
+            const tx = db.transaction('audio-files', 'readwrite');
+            const store = tx.objectStore('audio-files');
+            const rq = store.put(blob, k);
+            rq.onsuccess = () => resolve();
+            rq.onerror = () => reject(rq.error);
+          });
+        } catch {
+          // ignore cache failure
+        }
+      };
+
+      try {
+        const cached = await getFromIDB(key);
+        if (cached) {
+          objectUrl = URL.createObjectURL(cached);
+          if (!cancelled) setAudioSource(objectUrl);
+          return;
+        }
+
+        // Not cached: fetch, set object URL and cache blob for next time
+        const resp = await fetch(src, { method: 'GET', credentials: 'same-origin' });
+        if (!resp.ok) throw new Error('Audio fetch failed');
+        const buffer = await resp.arrayBuffer();
+        const blob = new Blob([buffer], { type: resp.headers.get('Content-Type') || 'audio/mpeg' });
+        // cache asynchronously (no await blocking UI)
+        putToIDB(key, blob).catch(() => {});
+        objectUrl = URL.createObjectURL(blob);
+        if (!cancelled) setAudioSource(objectUrl);
+      } catch {
+        console.warn('Failed to load audio');
+      }
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
   }, [audioSrc]);
 
   useEffect(() => {
@@ -113,10 +201,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
           ref={audioRef}
           src={audioSource}
           preload="none"
+          // prevent default context menu and hint browser not to expose download
+          onContextMenu={(e) => e.preventDefault()}
+          controlsList="nodownload noremoteplayback"
           onError={(e) => {
             console.warn('Audio loading error:', e);
             // Handle audio loading errors gracefully
           }}
+          aria-hidden="true"
         />
       )}
 

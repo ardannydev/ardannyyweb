@@ -1,14 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-interface HeroAnimationContextType {
-  isHeroAnimationComplete: boolean;
-  setHeroAnimationComplete: (complete: boolean) => void;
-}
-
-const HeroAnimationContext = createContext<HeroAnimationContextType | undefined>(undefined);
+import React, { useState, ReactNode } from 'react';
+import { HeroAnimationContext } from './HeroAnimationContextValue';
 
 export const HeroAnimationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isHeroAnimationComplete, setIsHeroAnimationComplete] = useState(false);
+  // Keep animation state in-memory only. This ensures the typewriter runs
+  // on full page reload / open, while SPA client-side navigation will keep
+  // this provider mounted so the animation won't re-run during route changes.
+  const [isHeroAnimationComplete, setIsHeroAnimationComplete] = useState<boolean>(false);
 
   const setHeroAnimationComplete = (complete: boolean) => {
     setIsHeroAnimationComplete(complete);
@@ -24,10 +21,4 @@ export const HeroAnimationProvider: React.FC<{ children: ReactNode }> = ({ child
   );
 };
 
-export const useHeroAnimation = () => {
-  const context = useContext(HeroAnimationContext);
-  if (context === undefined) {
-    throw new Error('useHeroAnimation must be used within a HeroAnimationProvider');
-  }
-  return context;
-};
+// internal: use the hook from `useHeroAnimation.ts`

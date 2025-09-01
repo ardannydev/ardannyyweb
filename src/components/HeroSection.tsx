@@ -5,12 +5,12 @@ import ParticleBackground from './ParticleBackground';
 import TypewriterText from './TypewriterText';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useHeroAnimation } from '../contexts/HeroAnimationContext';
+import { useHeroAnimation } from '../contexts/useHeroAnimation';
 
 const HeroSection: React.FC = () => {
   const { theme } = useTheme();
   const { t } = useLanguage();
-  const { setHeroAnimationComplete } = useHeroAnimation();
+  const { setHeroAnimationComplete, isHeroAnimationComplete } = useHeroAnimation();
   const [showSubtitle, setShowSubtitle] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
 
@@ -41,9 +41,9 @@ const HeroSection: React.FC = () => {
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 w-full max-w-5xl mx-auto">
         {/* Glassmorphism Card */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 50 }}
+          initial={{ opacity: 1, scale: 1, y: 0 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          transition={{ duration: 0 }}
           className={`${window.matchMedia('(max-width: 768px)').matches ? 'backdrop-blur-sm' : 'backdrop-blur-md'} bg-white/10 dark:bg-space-blue/20 rounded-2xl sm:rounded-3xl border border-white/20 dark:border-electric-cyan/30 p-6 sm:p-8 md:p-10 lg:p-12 shadow-2xl mx-4 sm:mx-0`}
           style={{ willChange: 'transform, opacity', transform: 'translate3d(0,0,0)' }}
         >
@@ -68,9 +68,9 @@ const HeroSection: React.FC = () => {
 
           {/* Main Title */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0 }}
             className="mb-6"
           >
             <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold font-orbitron bg-gradient-to-r from-electric-cyan via-white to-neon-purple bg-clip-text text-transparent leading-tight whitespace-normal break-words">
@@ -79,6 +79,7 @@ const HeroSection: React.FC = () => {
                 delay={500}
                 speed={100}
                 onComplete={handleTitleComplete}
+                skipAnimation={isHeroAnimationComplete}
               />
             </h1>
           </motion.div>
@@ -97,6 +98,7 @@ const HeroSection: React.FC = () => {
                   delay={200}
                   speed={80}
                   onComplete={handleSubtitleComplete}
+                  skipAnimation={isHeroAnimationComplete}
                 />
               </h2>
             </motion.div>
@@ -116,6 +118,7 @@ const HeroSection: React.FC = () => {
                   delay={200}
                   speed={30}
                   onComplete={handleDescriptionComplete}
+                  skipAnimation={isHeroAnimationComplete}
                 />
               </p>
             </motion.div>

@@ -3,7 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#667eea" />
+    <!-- Critical inline styles to avoid white flash before CSS loads -->
+    <style>
+      /* Minimal critical background + loader styles */
+      html, body { background-color: #667eea; margin:0; padding:0; }
+      #site-bg { position: fixed; inset:0; z-index: -1; background-image: linear-gradient(135deg,#667eea 0%,#764ba2 100%); background-size:cover; }
+      /* Initial loader visible before React mounts */
+      #initial-loader { position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; }
+      #initial-loader .loader-card { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,0.06); padding:18px; border-radius:12px; text-align:center; }
+      #initial-loader h1{ color:#fff; margin:0 0 6px 0; font-size:18px; }
+      #initial-loader p{ color:rgba(255,255,255,0.8); margin:0; font-size:13px; }
+    </style>
+    <!-- Preload main stylesheet to speed up first paint -->
+    <link rel="preload" as="style" href="/src/index.css">
     <title>ARD Portofolio</title>
     <script type="module">
       if (import.meta.hot?.on) {
@@ -18,7 +32,7 @@
   <body>
     <!-- Fixed background layer to avoid white flashes on mobile during fast scroll/zoom -->
     <div id="site-bg" aria-hidden="true"></div>
-    <div id="root"></div>
+  <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
       // Force a small repaint on the background when user interacts after idle

@@ -2,20 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Settings, 
-  Clock, 
-  Wrench, 
+  Settings,
   AlertTriangle
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface MaintenanceProps {
-  pageTitle: string;
-  pageType: 'about' | 'contact';
+  pageTitle?: string;
+  pageType?: 'about' | 'contact' | string;
 }
 
 const Maintenance: React.FC<MaintenanceProps> = ({ 
-  pageTitle, 
+  pageTitle,
   pageType
 }) => {
   const { t } = useLanguage();
@@ -46,36 +44,12 @@ const Maintenance: React.FC<MaintenanceProps> = ({
       }
     }
   };
-
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
       transition: { duration: 0.6, ease: 'easeOut' }
-    }
-  };
-
-  const iconVariants = {
-    animate: {
-      rotate: 360,
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: 'linear'
-      }
-    }
-  };
-
-  const pulseVariants = {
-    animate: {
-      scale: [1, 1.1, 1],
-      opacity: [0.7, 1, 0.7],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: 'easeInOut'
-      }
     }
   };
 
@@ -120,19 +94,19 @@ const Maintenance: React.FC<MaintenanceProps> = ({
         {/* Title Section */}
         <motion.div variants={itemVariants} className="mb-8">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-orbitron bg-gradient-to-r from-electric-cyan via-white to-neon-purple bg-clip-text text-transparent mb-4">
-            Halaman Dalam Maintenance
+            {t.maintenanceTitle ?? 'Maintenance'}
           </h1>
           <p className="text-xl sm:text-2xl text-gray-300 mb-2">
-            {pageTitle}
+            {pageTitle ?? (pageType === 'about' ? t.aboutTitle : pageType === 'contact' ? t.contactTitle : '')}
           </p>
           <div className="flex items-center justify-center space-x-2 text-yellow-400 mb-6">
             <AlertTriangle className="w-5 h-5" />
-            <span className="text-lg font-medium">Sedang dalam perbaikan</span>
+            <span className="text-lg font-medium">{t.maintenanceStatus ?? 'Under maintenance'}</span>
           </div>
           <div className="bg-gradient-to-r from-electric-cyan/20 to-neon-purple/20 rounded-lg p-4 border border-electric-cyan/30">
-            <p className="text-white text-lg mb-2">Akan kembali ke beranda dalam:</p>
+            <p className="text-white text-lg mb-2">{t.maintenanceReturn ?? 'Returning to home in:'}</p>
             <div className="text-3xl font-bold text-electric-cyan">
-              {countdown} detik
+              {countdown} {t.maintenanceSeconds ?? 'detik'}
             </div>
           </div>
         </motion.div>
@@ -149,10 +123,10 @@ const Maintenance: React.FC<MaintenanceProps> = ({
           className="mt-12 text-center"
         >
           <p className="text-gray-400 text-sm">
-            Terakhir diperbarui: 1 September 2025 pukul 14.55
+            {t.maintenanceLastUpdated ?? 'Terakhir diperbarui: 1 September 2025 pukul 14.55'}
           </p>
           <p className="text-gray-500 text-xs mt-2">
-            Halaman akan kembali normal setelah maintenance selesai
+            {t.maintenanceReturnNote ?? 'Halaman akan kembali normal setelah maintenance selesai'}
           </p>
         </motion.div>
       </motion.div>

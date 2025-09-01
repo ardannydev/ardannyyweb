@@ -64,10 +64,26 @@ export interface Translations {
   // Footer
   footerCopyright: string;
   footerSupport: string;
+  
+  // Maintenance
+  maintenanceTitle: string;
+  maintenanceStatus: string;
+  maintenanceReturn: string;
+  maintenanceSeconds: string;
+  maintenanceLastUpdated: string;
+  maintenanceReturnNote: string;
 }
 
 export const translations: Record<string, Translations> = {
   en: {
+  // Maintenance
+  maintenanceTitle: "Maintenance",
+  maintenanceStatus: "Under maintenance",
+  maintenanceReturn: "Returning to home in:",
+  maintenanceSeconds: "seconds",
+  maintenanceLastUpdated: "Last updated: Sep 1, 2025 14:55",
+  maintenanceReturnNote: "Page will return to normal after maintenance is complete",
+
     // Hero Section
     heroTitle: "Hello, I'm Danny",
     heroSubtitle: "Content Creator & Developer",
@@ -135,6 +151,14 @@ export const translations: Record<string, Translations> = {
     footerSupport: "Support"
   },
   id: {
+  // Maintenance
+  maintenanceTitle: "Maintenance",
+  maintenanceStatus: "Sedang dalam perbaikan",
+  maintenanceReturn: "Akan kembali ke beranda dalam:",
+  maintenanceSeconds: "detik",
+  maintenanceLastUpdated: "Terakhir diperbarui: 1 September 2025 pukul 14.55",
+  maintenanceReturnNote: "Halaman akan kembali normal setelah maintenance selesai",
+
     // Hero Section
     heroTitle: "Halo, Saya Danny",
     heroSubtitle: "Content Creator & Developer",

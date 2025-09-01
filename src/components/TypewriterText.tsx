@@ -7,6 +7,7 @@ interface TypewriterTextProps {
   speed?: number;
   className?: string;
   onComplete?: () => void;
+  skipAnimation?: boolean;
 }
 
 const TypewriterText: React.FC<TypewriterTextProps> = ({
@@ -14,7 +15,8 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
   delay = 0,
   speed = 50,
   className = '',
-  onComplete
+  onComplete,
+  skipAnimation = false
 }) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,15 +30,16 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
   }, [text, isComplete]);
 
   useEffect(() => {
-    // On mobile devices, skip the typing animation and render immediately
+    // Skip typing animation when requested (mobile, or skipAnimation flag)
     const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile) {
+    if (isMobile || skipAnimation) {
       // set full text and mark complete
       setDisplayText(text);
       setCurrentIndex(text.length);
       if (!isComplete) {
         setIsComplete(true);
-        onComplete?.();
+        // call onComplete asynchronously to avoid React state update during render
+        setTimeout(() => onComplete?.(), 0);
       }
       return;
     }
@@ -52,7 +55,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
       setIsComplete(true);
       onComplete?.();
     }
-  }, [currentIndex, text, delay, speed, isComplete, onComplete]);
+  }, [currentIndex, text, delay, speed, isComplete, onComplete, skipAnimation]);
 
   return (
     <span className={className}>
