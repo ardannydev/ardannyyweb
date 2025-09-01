@@ -28,6 +28,19 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
   }, [text, isComplete]);
 
   useEffect(() => {
+    // On mobile devices, skip the typing animation and render immediately
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      // set full text and mark complete
+      setDisplayText(text);
+      setCurrentIndex(text.length);
+      if (!isComplete) {
+        setIsComplete(true);
+        onComplete?.();
+      }
+      return;
+    }
+
     if (currentIndex < text.length) {
       const timeout = setTimeout(() => {
         setDisplayText(prev => prev + text[currentIndex]);

@@ -79,3 +79,11 @@ html, body {
   -webkit-transform: translateZ(0) scale(1);
   transform: translateZ(0) scale(1);
 }
+
+/* Promote above-the-fold sections to their own layer to avoid delayed paint on scroll */
+.preload-visible {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  contain: paint;
+}

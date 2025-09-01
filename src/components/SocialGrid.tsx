@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Instagram, 
   Youtube, 
   Music, 
   Twitter, 
   Github, 
-  Mail, 
+  
   ExternalLink,
   MessageCircle,
   DollarSign
@@ -92,7 +92,7 @@ const socialLinks: SocialLink[] = [
 ];
 
 const SocialGrid: React.FC = () => {
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  
   const { t, currentLanguage } = useLanguage();
 
   const getCardSize = (size: string) => {
@@ -105,7 +105,7 @@ const SocialGrid: React.FC = () => {
   };
 
   return (
-    <section key={`social-${currentLanguage.code}`} className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
+    <section key={`social-${currentLanguage.code}`} className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 preload-visible">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
@@ -130,8 +130,7 @@ const SocialGrid: React.FC = () => {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onMouseEnter={() => setHoveredCard(link.platform)}
-                  onMouseLeave={() => setHoveredCard(null)}
+                  
                   className={`group relative block p-6 rounded-2xl backdrop-blur-md bg-white/10 dark:bg-space-blue/20 border border-white/20 dark:border-electric-cyan/30 hover:border-electric-cyan/50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] min-h-[120px] sm:min-h-[140px]
                     ${link.featured ? 'ring-2 ring-electric-cyan/50' : ''}`}
                 >
