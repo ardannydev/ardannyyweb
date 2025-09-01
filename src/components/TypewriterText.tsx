@@ -55,16 +55,16 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
   }, [currentIndex, text, delay, speed, isComplete, onComplete]);
 
   return (
-    <div className={className}>
+    <span className={className}>
       <span>{displayText}</span>
       {!isComplete && (
         <motion.span
           animate={{ opacity: [1, 0] }}
           transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
-          className="inline-block w-0.5 h-6 bg-electric-cyan ml-1"
+          className="inline-block w-0.5 h-4 sm:h-6 bg-electric-cyan ml-1 align-middle"
         />
       )}
-    </div>
+    </span>
   );
 };
 

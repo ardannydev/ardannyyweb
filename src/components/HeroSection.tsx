@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import ParticleBackground from './ParticleBackground';
 import TypewriterText from './TypewriterText';
 import { useTheme } from '../contexts/ThemeContext';
@@ -9,7 +9,7 @@ import { useHeroAnimation } from '../contexts/HeroAnimationContext';
 
 const HeroSection: React.FC = () => {
   const { theme } = useTheme();
-  const { t, currentLanguage } = useLanguage();
+  const { t } = useLanguage();
   const { setHeroAnimationComplete } = useHeroAnimation();
   const [showSubtitle, setShowSubtitle] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
@@ -73,7 +73,7 @@ const HeroSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mb-6"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold font-orbitron bg-gradient-to-r from-electric-cyan via-white to-neon-purple bg-clip-text text-transparent leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold font-orbitron bg-gradient-to-r from-electric-cyan via-white to-neon-purple bg-clip-text text-transparent leading-tight whitespace-normal break-words">
               <TypewriterText
                 text={t.heroTitle}
                 delay={500}
@@ -91,7 +91,7 @@ const HeroSection: React.FC = () => {
               transition={{ duration: 0.6 }}
               className="mb-8"
             >
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white dark:text-gray-200 font-inter">
+              <h2 className="text-base sm:text-xl md:text-2xl lg:text-3xl text-white dark:text-gray-200 font-inter whitespace-normal break-words">
                 <TypewriterText
                   text={t.heroSubtitle}
                   delay={200}
