@@ -30,15 +30,15 @@ html, body {
 /* Ensure consistent background across all screen sizes */
 @media (max-width: 768px) {
   html, body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    position: fixed;
-    width: 100%;
-    height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Allow natural scrolling on mobile — avoid position:fixed on html/body which can block layout updates */
+  min-height: 100%;
   }
   
   #root {
-    height: 100vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+  min-height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
   }
 }

@@ -5,7 +5,6 @@ import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useHeroAnimation } from '../contexts/HeroAnimationContext';
 import ToolboxSelector from './ToolboxSelector';
-import ParticleBackground from './ParticleBackground';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -381,7 +380,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                           <Link
                             to={item.path}
                             onClick={() => setIsMenuOpen(false)}
-                            className={`group relative block px-4 py-3 sm:px-5 sm:py-4 md:px-6 md:py-5 rounded-xl text-base sm:text-lg md:text-xl font-medium transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] min-h-[48px] sm:min-h-[56px] md:min-h-[64px] flex items-center ${
+                            className={`group relative px-4 py-3 sm:px-5 sm:py-4 md:px-6 md:py-5 rounded-xl text-base sm:text-lg md:text-xl font-medium transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] min-h-[48px] sm:min-h-[56px] md:min-h-[64px] flex items-center ${
                               location.pathname === item.path
                                 ? 'text-white dark:text-electric-cyan bg-electric-cyan/20 border border-electric-cyan/40 shadow-lg shadow-electric-cyan/20'
                                 : 'text-white dark:text-gray-300 hover:text-white dark:hover:text-white hover:bg-white/15 border border-transparent hover:border-white/30 hover:shadow-lg hover:shadow-white/10'
@@ -505,7 +504,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
           }}
           initial="hidden"
           animate="visible"
-          className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6"
+          /* Use fixed so toolbox is not clipped by any scrolling containers on mobile */
+          className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 touch-auto"
         >
           <motion.div
             variants={{
