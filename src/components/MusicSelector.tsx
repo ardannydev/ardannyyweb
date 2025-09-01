@@ -82,7 +82,7 @@ const MusicSelector: React.FC<MusicSelectorProps> = ({
                       animate={{ opacity: 1, x: 0 }}
                       onClick={() => {
                         onTogglePlay();
-                        setIsOpen(false);
+                        setInternalIsOpen(false);
                       }}
                       className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-300 hover:scale-[1.02] relative overflow-hidden text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-white/10 hover:to-electric-cyan/5 border border-transparent hover:border-white/25 dark:hover:border-electric-cyan/40 mb-2"
                     >
