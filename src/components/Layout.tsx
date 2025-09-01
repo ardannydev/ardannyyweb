@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
@@ -13,8 +13,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isHeaderVisible] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(() => {
@@ -35,27 +34,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
     { path: '/contact', label: 'Contact' }
   ];
 
-  // Scroll detection for auto-hide header
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Show header when scrolling up or at top
-      if (currentScrollY < lastScrollY || currentScrollY < 10) {
-        setIsHeaderVisible(true);
-      } 
-      // Hide header when scrolling down and past threshold
-      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsHeaderVisible(false);
-        setIsMenuOpen(false); // Close mobile menu when hiding header
-      }
-      
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  // Intentionally do not react to scroll to avoid layout shifts when user scrolls.
+  // Header visibility and menu state remain stable during scroll.
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
