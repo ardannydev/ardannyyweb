@@ -52,6 +52,11 @@ html, body {
   }
 }
 
+/* Prevent pinch-zoom and multi-touch gestures on mobile for consistent layout */
+html, body, #root {
+  touch-action: pan-y;
+}
+
 /* Additional helper: ensure any full-bleed sections keep background behind them */
 .full-bleed {
   background: inherit;
