@@ -20,5 +20,25 @@
     <div id="site-bg" aria-hidden="true"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Force a small repaint on the background when user interacts after idle
+      (function () {
+        const bg = document.getElementById('site-bg');
+        if (!bg) return;
+
+        const triggerRepaint = () => {
+          bg.classList.add('site-bg-repaint');
+          // remove after next frame
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => bg.classList.remove('site-bg-repaint'));
+          });
+        };
+
+        window.addEventListener('touchstart', triggerRepaint, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') triggerRepaint();
+        });
+      })();
+    </script>
   </body>
 </html>
