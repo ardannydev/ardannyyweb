@@ -95,15 +95,6 @@ const SocialGrid: React.FC = () => {
   
   const { t, currentLanguage } = useLanguage();
 
-  const getCardSize = (size: string) => {
-    switch (size) {
-      case 'large': return 'sm:col-span-2';
-      case 'medium': return 'col-span-1';
-      case 'small': return 'col-span-1';
-      default: return 'col-span-1';
-    }
-  };
-
   return (
     <section key={`social-${currentLanguage.code}`} className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 preload-visible">
       <div className="max-w-6xl mx-auto">
@@ -118,27 +109,31 @@ const SocialGrid: React.FC = () => {
         </div>
 
         {/* Social Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 px-2 sm:px-0">
           {socialLinks.map((link) => {
-            
             return (
               <div
                 key={link.platform}
-                className={`${getCardSize(link.size)}`}
+                className={`${link.size === 'large' ? 'sm:col-span-2' : ''}`}
               >
                 <a
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  
-                  className={`group relative block p-6 rounded-2xl backdrop-blur-md bg-white/10 dark:bg-space-blue/20 border border-white/20 dark:border-electric-cyan/30 hover:border-electric-cyan/50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] min-h-[120px] sm:min-h-[140px]
-                    ${link.featured ? 'ring-2 ring-electric-cyan/50' : ''}`}
+                  data-tooltip={`Visit ${link.displayName}: ${link.url}`}
+                  className={`group relative block p-4 sm:p-6 rounded-2xl backdrop-blur-md bg-white/10 dark:bg-space-blue/20 border border-white/20 dark:border-electric-cyan/30 transition-all duration-200 active:scale-[0.98] hover:scale-[1.02] min-h-[100px] sm:min-h-[140px] touch-pan-y
+                    ${link.featured ? 'ring-2 ring-electric-cyan/50' : ''}
+                    before:content-[attr(data-tooltip)] before:absolute before:bottom-full before:left-1/2 before:-translate-x-1/2 before:mb-2
+                    before:px-3 before:py-2 before:rounded-lg before:bg-space-blue/90 before:text-white before:text-sm
+                    before:whitespace-nowrap before:opacity-0 before:scale-95 
+                    active:before:opacity-100 active:before:scale-100 sm:hover:before:opacity-100 sm:hover:before:scale-100
+                    before:transition-all before:duration-200 before:pointer-events-none before:z-50`}
                 >
                   {/* Content */}
-                  <div className="flex items-center space-x-3 sm:space-x-4 h-full">
+                  <div className="flex items-center space-x-2 sm:space-x-4 h-full">
                     {/* Icon */}
                     <div 
-                      className="p-2 sm:p-3 rounded-lg transition-colors duration-300 flex-shrink-0"
+                      className="p-2 sm:p-3 rounded-lg transition-colors duration-200 flex-shrink-0"
                       style={{
                         backgroundColor: `${link.color}20`,
                         color: link.color
@@ -149,7 +144,7 @@ const SocialGrid: React.FC = () => {
 
                     {/* Text Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-white dark:text-white text-base sm:text-lg mb-1 truncate">
+                      <h3 className="font-semibold text-white dark:text-white text-sm sm:text-lg mb-1 truncate">
                         {link.displayName}
                       </h3>
                       <p className="text-xs sm:text-sm text-white dark:text-gray-300 truncate">
@@ -158,7 +153,7 @@ const SocialGrid: React.FC = () => {
                     </div>
 
                     {/* External Link Icon */}
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-shrink-0">
+                    <div className="flex-shrink-0 opacity-50 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
                       <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-gray-300" />
                     </div>
 

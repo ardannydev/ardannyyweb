@@ -157,47 +157,14 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             <div className="relative px-6 py-4 md:px-8 md:py-5">
               <div className="flex items-center justify-between">
                 {/* Logo with Particles Effect */}
-                <Link to="/" className="relative group">
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="relative"
-                    style={{ willChange: 'transform' }}
-                  >
-                    {/* Logo Glow */}
-                    <div className="absolute -inset-2 bg-gradient-to-r from-electric-cyan to-neon-purple rounded-lg blur opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                    
-                    {/* Logo Text */}
-                    <div className="relative text-3xl md:text-4xl font-bold font-orbitron bg-gradient-to-r from-electric-cyan via-white to-neon-purple bg-clip-text text-transparent">
-                      ARD
-                    </div>
-                    
-                    {/* Floating Particles */}
-                    <motion.div
-                      animate={{ 
-                        rotate: 360,
-                        scale: [1, 1.2, 1]
-                      }}
-                      transition={{ 
-                        rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-                        scale: { duration: 2, repeat: Infinity }
-                      }}
-                      className="absolute -top-1 -right-1 w-2 h-2 bg-electric-cyan rounded-full opacity-60"
-                      style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
-                    ></motion.div>
-                    <motion.div
-                      animate={{ 
-                        rotate: -360,
-                        scale: [1, 0.8, 1]
-                      }}
-                      transition={{ 
-                        rotate: { duration: 15, repeat: Infinity, ease: "linear" },
-                        scale: { duration: 3, repeat: Infinity }
-                      }}
-                      className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-neon-purple rounded-full opacity-40"
-                      style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
-                    ></motion.div>
-                  </motion.div>
+                <Link 
+                  to="/" 
+                  className="block"
+                  aria-label="Go to Home Page"
+                >
+                  <div className="text-3xl md:text-4xl font-bold font-orbitron bg-gradient-to-r from-electric-cyan via-white to-neon-purple bg-clip-text text-transparent">
+                    ARD
+                  </div>
                 </Link>
 
                 {/* Desktop Navigation - Diagonal Layout */}
