@@ -15,7 +15,11 @@
 
 /* Prevent white background flashes on mobile */
 html, body {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Use a solid fallback color for fast repaints, with gradient layered above */
+  background-color: #667eea;
+  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* helps iOS keep background stable during scroll */
   min-height: 100vh;
   margin: 0;
   padding: 0;
@@ -40,5 +44,17 @@ html, body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   position: relative;
+  /* Improve compositing and reduce flash when repainting on mobile */
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   }
+}
+
+/* Additional helper: ensure any full-bleed sections keep background behind them */
+.full-bleed {
+  background: inherit;
+  background-attachment: fixed;
 }
